@@ -5,7 +5,8 @@
             <b-create :click="goCreate" class="float-right"></b-create>
         </template>
         <template v-slot:body>
-            <table class="table table-sm table-striped table-hover table-bordered">
+
+            <table id="musicTable" class="table table-sm table-striped table-hover table-bordered nowrap" width="100%" style="font-size: 12px">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -43,6 +44,7 @@
     import router from '../../router/index'
     import AxiosSerice from '../../common/service/axios-service'
     const axios = new AxiosSerice()
+    const $ = require('jquery')
     export default {
         name: "MusicList",
         data(){
@@ -85,6 +87,10 @@
                 axios.doGet('/api/music/').then(res=>{
                     console.log(res.data)
                     this.items = res.data
+                    $("#musicTable").dataTable().fnDestroy()
+
+                }).finally(()=>{
+                    $("#musicTable").dataTable({ scrollX: true,  "searching": false, paging: false })
                 })
             },
             findById(id){
